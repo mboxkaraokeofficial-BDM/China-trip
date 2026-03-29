@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Tech to High-Touch: ธุรกิจ นวัตกรรม และลมหายใจ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0f172a; --accent-tech: #0ea5e9; --accent-spirit: #10b981; --accent-touch: #f59e0b; }
+        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; color: var(--primary); scroll-behavior: smooth; }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin: auto; height: 350px; }
+        .mission-card { transition: all 0.3s ease; border-left-width: 4px; }
+        .mission-card:hover { transform: translateX(5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .tab-active { border-bottom: 3px solid var(--accent-tech); color: var(--accent-tech); font-weight: 600; }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        input[type="checkbox"]:checked + label { text-decoration: line-through; opacity: 0.6; }
+        .timeline-item::before { content: ''; position: absolute; left: -9px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; }
+    </style>
+    <!-- Chosen Palette: Slate for depth, Sky for Tech (SZ), Emerald for Spirit (YS), Amber for Touch (GZ) -->
+    <!-- Application Structure Plan: 
+         This SPA acts as a comprehensive Command Center for the trip. 
+         1. Preparation Guide: Crucial info on apps, docs, and dress codes to be checked first.
+         2. City Context: Brief educational cards to set the mood for SZ, YS, and GZ.
+         3. Mission Dashboard: Gamified mission tracker with a Radar Chart to engage the team.
+         4. Master Itinerary: A detailed, filterable timetable (hourly) including flight BKK-SZX-CAN-BKK, transport details, and specific attractions.
+         5. Logistics & Plan B: Financial breakdown and contingency plans in accordions for quick access.
+    -->
+    <!-- Visualization & Content Choices: 
+         - Radar Chart: Visualizes the balance of Tech, Nature, and Art based on user-checked missions.
+         - Doughnut Chart: Breaks down the budget (Food, Transport, Activities).
+         - Interactive Timetable: Uses JS to filter by city/day.
+         - Plan B Accordion: Summarizes alternatives for rainy days or full bookings.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="leading-relaxed">
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 z-50 glass shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">💠</span>
+                <span class="font-bold text-lg hidden sm:block">High-Tech to High-Touch</span>
+            </div>
+            <div class="flex space-x-6 text-sm font-medium">
+                <a href="#prep" class="hover:text-sky-500 transition">เตรียมตัว</a>
+                <a href="#itinerary" class="hover:text-sky-500 transition">ตารางเวลา</a>
+                <a href="#missions" class="hover:text-sky-500 transition">ภารกิจ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="bg-slate-900 text-white py-20 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl md:text-5xl font-bold mb-6">High-Tech to High-Touch: ธุรกิจ นวัตกรรม และลมหายใจ</h1>
+            <p class="text-slate-400 text-lg mb-8 italic">"การเชื่อมโยงอนาคตผ่านเซินเจิ้น จิตวิญญาณที่หยางซั่ว และการค้าที่กวางโจว"</p>
+            <div class="flex flex-wrap justify-center gap-6 text-sm">
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-sky-500"></span> นวัตกรรม (SZ)</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500"></span> ธรรมชาติ (YS)</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500"></span> ศิลปะและการค้า (GZ)</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-12 space-y-20">
+
+        <!-- Preparation Section -->
+        <section id="prep" class="scroll-mt-24">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-2">📝 การเตรียมตัวก่อนเดินทาง (Pre-trip Guide)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="space-y-2">
+                        <h3 class="font-bold text-slate-800">📄 เอกสาร & วีซ่า</h3>
+                        <p class="text-xs text-slate-500">พาสปอร์ตไทย Free Visa 30 วัน เตรียมไฟล์ภาพพาสปอร์ตไว้ในมือถือ</p>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="font-bold text-slate-800">📱 แอปที่ต้องมี</h3>
+                        <p class="text-xs text-slate-500">Alipay/WeChat (ผูกบัตร), Amap (แผนที่), DeepL (แปลภาษา)</p>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="font-bold text-slate-800">👔 การแต่งกาย</h3>
+                        <p class="text-xs text-slate-500">18-25°C เลเยอร์บางๆ, Canton Fair: Business Casual + รองเท้าวิ่งสุภาพ</p>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="font-bold text-slate-800">🔋 พาวเวอร์แบงค์</h3>
+                        <p class="text-xs text-slate-500">ห้ามเกิน 32,000mAh, ต้องมีตัวเลขระบุชัดเจน ห้ามโหลดใต้เครื่อง</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- City Context Section -->
+        <section id="context">
+            <h2 class="text-2xl font-bold mb-8">🌐 บริบทของเมือง (City Context)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 bg-white rounded-2xl border-l-4 border-l-sky-500 shadow-sm">
+                    <h3 class="font-bold text-sky-600 mb-2">เซินเจิ้น: ปาฏิหาริย์ 40 ปี</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">จากหมู่บ้านประมงสู่ Silicon Valley แห่งตะวันออก ศูนย์รวม Hardware และนวัตกรรมล้ำสมัย</p>
+                </div>
+                <div class="p-6 bg-white rounded-2xl border-l-4 border-l-emerald-500 shadow-sm">
+                    <h3 class="font-bold text-emerald-600 mb-2">หยางซั่ว: ภาพวาดพู่กันจีน</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">ภูเขาหินปูนอายุพันปี (Karst) ที่สอนให้เรารู้จักความสงบและสุนทรียภาพแห่งชีวิต</p>
+                </div>
+                <div class="p-6 bg-white rounded-2xl border-l-4 border-l-amber-500 shadow-sm">
+                    <h3 class="font-bold text-amber-600 mb-2">กวางโจว: ประตูการค้าโลก</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">จุดเริ่มต้นเส้นทางสายไหมทางทะเล ที่วันนี้ผสานธุรกิจแสนล้านเข้ากับศิลปะดิจิทัล</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timetable Section -->
+        <section id="itinerary" class="scroll-mt-24">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold">🗓️ ตารางเวลาละเอียด (Hourly Timetable)</h2>
+                    <p class="text-sm text-slate-400">แผนการเดินทางแบบรายชั่วโมง พร้อมวิธีการเดินทางและจุดเช็คอินสำคัญ</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="filterCity('SZ')" class="city-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-sky-500 text-white" id="btn-SZ">SHENZHEN</button>
+                    <button onclick="filterCity('YS')" class="city-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-white" id="btn-YS">YANGSHUO</button>
+                    <button onclick="filterCity('GZ')" class="city-btn px-4 py-2 rounded-xl text-xs font-bold border transition bg-white" id="btn-GZ">GUANGZHOU</button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                <div id="timetable-content" class="divide-y divide-slate-50">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Dashboard -->
+        <section id="missions" class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start scroll-mt-24">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2">📊 ดัชนีความสำเร็จ (Team Analytics)</h2>
+                <div class="chart-container">
+                    <canvas id="missionChart"></canvas>
+                </div>
+                <div class="mt-6 flex justify-around text-center text-xs text-slate-400">
+                    <div><span class="block text-sky-500 font-bold" id="stat-sz">0/2</span> SZ</div>
+                    <div><span class="block text-emerald-500 font-bold" id="stat-ys">0/2</span> YS</div>
+                    <div><span class="block text-amber-500 font-bold" id="stat-gz">0/3</span> GZ</div>
+                    <div><span class="block text-rose-500 font-bold" id="stat-food">0/1</span> Food</div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <h2 class="text-xl font-bold mb-2">🏆 กระดานภารกิจ (High-Tech to High-Touch Missions)</h2>
+                
+                <div id="mission-list" class="space-y-4">
+                    <!-- Missions categorized by color/city -->
+                    <div class="mission-card bg-sky-50/30 p-4 rounded-2xl border-l-sky-500 flex gap-4">
+                        <input type="checkbox" id="m1" class="mt-1 w-5 h-5 accent-sky-500" onchange="updateMissions()">
+                        <label for="m1" class="cursor-pointer">
+                            <span class="block font-bold text-sky-900">📸 ภารกิจ Zaha Curve (SZ)</span>
+                            <span class="text-xs text-sky-700">ถ่ายรูปเส้นโค้งอาคาร Science Museum เพื่อกระตุ้นความคิดสร้างสรรค์</span>
+                        </label>
+                    </div>
+                    <div class="mission-card bg-sky-50/30 p-4 rounded-2xl border-l-sky-500 flex gap-4">
+                        <input type="checkbox" id="m2" class="mt-1 w-5 h-5 accent-sky-500" onchange="updateMissions()">
+                        <label for="m2" class="cursor-pointer">
+                            <span class="block font-bold text-sky-900">🤖 Gadget Hunter (SZ)</span>
+                            <span class="text-xs text-sky-700">ค้นหาไอเทมที่ "ล้ำ" ที่สุดใน Huaqiangbei 1 อย่างเข้ากลุ่ม Line</span>
+                        </label>
+                    </div>
+                    <div class="mission-card bg-emerald-50/30 p-4 rounded-2xl border-l-emerald-500 flex gap-4">
+                        <input type="checkbox" id="m3" class="mt-1 w-5 h-5 accent-emerald-500" onchange="updateMissions()">
+                        <label for="m3" class="cursor-pointer">
+                            <span class="block font-bold text-emerald-900">🎧 อัดเสียงลมหายใจธรรมชาติ (YS)</span>
+                            <span class="text-xs text-emerald-700">บันทึกเสียงนก/น้ำไหล ณ แม่น้ำอวี้หลง 30 วินาที</span>
+                        </label>
+                    </div>
+                    <div class="mission-card bg-emerald-50/30 p-4 rounded-2xl border-l-emerald-500 flex gap-4">
+                        <input type="checkbox" id="m4" class="mt-1 w-5 h-5 accent-emerald-500" onchange="updateMissions()">
+                        <label for="m4" class="cursor-pointer">
+                            <span class="block font-bold text-emerald-900">💵 ตามหาภาพธนบัตร 20 หยวน (YS)</span>
+                            <span class="text-xs text-emerald-700">ถ่ายรูปมุมจริงเปรียบเทียบกับภาพในธนบัตร</span>
+                        </label>
+                    </div>
+                    <div class="mission-card bg-amber-50/30 p-4 rounded-2xl border-l-amber-500 flex gap-4">
+                        <input type="checkbox" id="m5" class="mt-1 w-5 h-5 accent-amber-500" onchange="updateMissions()">
+                        <label for="m5" class="cursor-pointer">
+                            <span class="block font-bold text-amber-900">🧪 ปรุงน้ำหอมแห่งตระกูล (GZ)</span>
+                            <span class="text-xs text-amber-700">สร้างกลิ่นที่เป็นตัวแทนของครอบครัว ณ Xuelei Museum</span>
+                        </label>
+                    </div>
+                    <div class="mission-card bg-amber-50/30 p-4 rounded-2xl border-l-amber-500 flex gap-4">
+                        <input type="checkbox" id="m6" class="mt-1 w-5 h-5 accent-amber-500" onchange="updateMissions()">
+                        <label for="m6" class="cursor-pointer">
+                            <span class="block font-bold text-amber-900">🌕 พิชิตสะพานพระจันทร์ (GZ)</span>
+                            <span class="text-xs text-amber-700">ถ่ายรูปเงาสะท้อนสะพานให้เป็นวงกลมที่สมบูรณ์ที่สุด (Yong Qing Fang)</span>
+                        </label>
+                    </div>
+                    <div class="mission-card bg-rose-50/30 p-4 rounded-2xl border-l-rose-500 flex gap-4">
+                        <input type="checkbox" id="m7" class="mt-1 w-5 h-5 accent-rose-500" onchange="updateMissions()">
+                        <label for="m7" class="cursor-pointer">
+                            <span class="block font-bold text-rose-900">🍽️ Foodie: No Beef Review</span>
+                            <span class="text-xs text-rose-700">รีวิวร้านปลา/ทะเลที่อร่อยที่สุด (Liwan/Haizhu) พร้อมรูปถ่าย</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Budget & Plan B Section -->
+        <section id="budget" class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center">
+                <h2 class="text-xl font-bold mb-6">💰 ประมาณการงบประมาณ (ต่อท่าน)</h2>
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+                <p class="text-xs text-slate-400 mt-4 leading-relaxed">ประมาณการ 2,700 - 3,500 RMB (13.5k - 17.5k THB)<br>*ไม่รวมตั๋วเครื่องบินและที่พัก</p>
+            </div>
+
+            <div class="space-y-4">
+                <h2 class="text-xl font-bold mb-6">🛡️ แผนสำรองและทางเลือก (Plan B)</h2>
+                <div class="bg-amber-50 p-6 rounded-2xl border border-amber-100">
+                    <h3 class="font-bold text-amber-900 mb-2">1. เมื่อพิพิธภัณฑ์เต็ม / จองไม่ได้</h3>
+                    <p class="text-xs text-amber-800">เปลี่ยนไปย่านศิลปะ Open-air ที่ไม่ต้องใช้การจอง: **Dongshankou** (กวางโจว) หรือ **OCT-LOFT** (เซินเจิ้น)</p>
+                </div>
+                <div class="bg-sky-50 p-6 rounded-2xl border border-sky-100">
+                    <h3 class="font-bold text-sky-900 mb-2">2. เมื่อฝนตกหนัก / สภาพอากาศไม่เป็นใจ</h3>
+                    <p class="text-xs text-sky-800">ย้ายกิจกรรมเข้าห้างสรรพสินค้าดีไซน์ล้ำ: **Parc Central**, **K11 Art Mall** หรือห้างใต้ดิน **Fashion Tianhe**</p>
+                </div>
+                <div class="bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
+                    <h3 class="font-bold text-emerald-900 mb-2">3. เมื่อผู้สูงวัยเหนื่อย / ล้าสะสม</h3>
+                    <p class="text-xs text-emerald-800">งดการใช้ Metro และใช้ **Didi Premier** ตลอดทั้งวันแทน รถจะมารับถึงหน้าจุดท่องเที่ยวและนุ่มนวลกว่า</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 py-12 text-center text-xs">
+        <p>© 2026 High-Tech to High-Touch Campaign | All information synthesized from trip reports.</p>
+    </footer>
+
+    <script>
+        const tripData = {
+            SZ: [
+                { day: "11 เม.ย.", time: "02:40", activity: "✈️ BKK (Suvarnabhumi) ออกเดินทาง (CZ 8158)", desc: "ต้องถึงสนามบินก่อนเที่ยงคืนวันที่ 10", transport: "Taxi", budget: "-" },
+                { day: "11 เม.ย.", time: "07:05", activity: "🛬 ถึงสนามบิน Shenzhen Bao'an (T3)", desc: "อาคารรังผึ้งสุดล้ำ สแกนนิ้วและผ่าน ตม.", transport: "Didi/Metro", budget: "-" },
+                { day: "11 เม.ย.", time: "09:30", activity: "🏨 Check-in JI Hotel Nanshan", desc: "ฝากกระเป๋าหรือเช็คอินถ้าห้องว่าง", transport: "Didi", budget: "50 RMB" },
+                { day: "11 เม.ย.", time: "10:30", activity: "🤖 Huaqiangbei (ตลาดอิเล็กทรอนิกส์)", desc: "เดินตลาดชิ้นส่วนและ Gadget ที่ใหญ่ที่สุดในโลก", transport: "Metro L1", budget: "0-500" },
+                { day: "11 เม.ย.", time: "12:00", activity: "🥟 ติ่มซำ Tao Tao Ju (No Beef)", desc: "ร้านติ่มซำชื่อดังในย่านตลาด", transport: "เดิน", budget: "120 RMB" },
+                { day: "11 เม.ย.", time: "13:30", activity: "🧁 แวะซื้อ Bao Pastry (ขนมหมูหยองสาหร่าย)", desc: "ของว่างยอดฮิตที่ห้ามพลาด (Xiaobei)", transport: "เดิน", budget: "40 RMB" },
+                { day: "11 เม.ย.", time: "15:00", activity: "🏛️ SZ Science & Tech Museum (Zaha Hadid)", desc: "ชมดีไซน์สถาปัตยกรรมล้ำยุคของสถาปนิกดัง", transport: "Didi", budget: "0" },
+                { day: "11 เม.ย.", time: "18:00", activity: "🚢 Sea World (Shekou)", desc: "ชมเรือ Minghua และบรรยากาศริมทะเลเปิดไฟสวย", transport: "Metro L2", budget: "0" },
+                { day: "12 เม.ย.", time: "09:30", activity: "🎨 MOCAPE (Museum & Planning)", desc: "พิพิธภัณฑ์ศิลปะและผังเมืองดีไซน์เมฆสีเงิน", transport: "Metro L3", budget: "0" },
+                { day: "12 เม.ย.", time: "14:30", activity: "🖼️ Shenzhen Art Museum (New Building)", desc: "อาคารใหม่กว้างขวาง แสดงนิทรรศการล้ำสมัย", transport: "Didi", budget: "0" },
+                { day: "12 เม.ย.", time: "19:00", activity: "✨ Civic Center Light Show", desc: "ชมการแสดงไฟบนตึกสูงที่เป็นสัญลักษณ์ของ SZ", transport: "Metro", budget: "0" }
+            ],
+            YS: [
+                { day: "13 เม.ย.", time: "09:00", activity: "🚄 ออกจาก SZ North สู่ Yangshuo", desc: "นั่งรถไฟความเร็วสูง (HSR) ~3 ชม.", transport: "HSR", budget: "180 RMB" },
+                { day: "13 เม.ย.", time: "13:30", activity: "⛰️ ถึงสถานี Yangshuo / เข้าที่พัก", desc: "Feiwo Buke Hotel มารับเข้าเขต Yulong River", transport: "รถโรงแรม", budget: "0" },
+                { day: "13 เม.ย.", time: "15:00", activity: "🛶 Yulong River Bamboo Rafting", desc: "ล่องแพไม้ไผ่แบบถ่อ เงียบสงบผ่านหุบเขา", transport: "แพไม้ไผ่", budget: "200 RMB" },
+                { day: "13 เม.ย.", time: "18:30", activity: "🐟 มื้อเย็น Beer Fish @ West Street", desc: "ทานปลาแช่เบียร์เมนูซิกเนเจอร์ (No Beef)", transport: "Didi", budget: "80 RMB" },
+                { day: "14 เม.ย.", time: "09:00", activity: "🚲 Cycling & Hiking (Moon Hill)", desc: "ปั่นจักรยานเลียบแม่น้ำและเดินขึ้นจุดชมวิว", transport: "จักรยาน", budget: "50 RMB" },
+                { day: "14 เม.ย.", time: "14:30", activity: "🌉 Fuli Bridge & Ancient Town", desc: "สะพานหินโบราณและหมู่บ้านทำงานศิลปะ", transport: "Didi", budget: "40 RMB" },
+                { day: "14 เม.ย.", time: "19:30", activity: "🎭 โชว์ Impression Sanjie Liu", desc: "การแสดงบนน้ำโดยผู้กำกับ จาง อวี้โหมว", transport: "รถรับส่ง", budget: "250 RMB" }
+            ],
+            GZ: [
+                { day: "15 เม.ย.", time: "10:00", activity: "🚄 นั่ง HSR เข้ากวางโจว (GZ South)", desc: "เดินทาง ~2 ชม. สู่เมืองหลวงแห่งกวางตุ้ง", transport: "HSR", budget: "130 RMB" },
+                { day: "15 เม.ย.", time: "13:00", activity: "🏨 Check-in Moodlink Mandian Retreat", desc: "ที่พักย่าน Tianhe สะดวกต่อการไปงานแฟร์", transport: "Didi", budget: "50 RMB" },
+                { day: "15 เม.ย.", time: "15:00", activity: "🎫 คุณ: ไปรับบัตร Canton Fair Badge", desc: "รับล่วงหน้าที่สนามบินหรือโรงแรมจุดบริการ", transport: "Metro L3", budget: "0" },
+                { day: "16 เม.ย.", time: "09:00", activity: "💼 คุณ: เข้างาน Canton Fair", desc: "ภารกิจเจรจาธุรกิจที่ Pazhou Complex", transport: "Metro L8", budget: "20 RMB" },
+                { day: "16 เม.ย.", time: "10:00", activity: "🏛️ ครอบครัว: GZ Art Museum (New)", desc: "พิพิธภัณฑ์ศิลปะใหม่ล่าสุดย่าน Lingnan", transport: "Metro L3", budget: "0" },
+                { day: "16 เม.ย.", time: "14:30", activity: "🎨 ครอบครัว: Bnnia Art Museum", desc: "ศิลปะฮีลใจที่ Guangzhou Four Seasons Place", transport: "Metro", budget: "0" },
+                { day: "17 เม.ย.", time: "10:00", activity: "🌸 ครอบครัว: Xuelei Fragrance Museum", desc: "พิพิธภัณฑ์น้ำหอม AI ปรุงกลิ่นเฉพาะตัว", transport: "Didi", budget: "80 RMB" },
+                { day: "17 เม.ย.", time: "15:00", activity: "📸 ครอบครัว: Yong Qing Fang & Moon Bridge", desc: "ย่านเมืองเก่ารีโนเวทและสะพานพระจันทร์ยอดฮิต", transport: "Metro L1", budget: "0" },
+                { day: "17 เม.ย.", time: "19:00", activity: "🦞 มื้อเย็น: Seafood Steam @ Haizhu", desc: "อาหารทะเลนึ่งย่าน Baogang Road (No Beef)", transport: "Didi", budget: "150 RMB" },
+                { day: "18 เม.ย.", time: "04:30", activity: "🚕 กลุ่ม A: ออกเดินทางไปสนามบิน CAN", transport: "Didi (จอง)", budget: "150 RMB" },
+                { day: "18 เม.ย.", time: "08:10", activity: "🛫 กลุ่ม A: ไฟลท์ CZ 357 บินกลับไทย", transport: "Flight", budget: "-" },
+                { day: "18 เม.ย.", time: "Day", activity: "🛍️ กลุ่ม B: เที่ยวห้าง Parc Central / Sam's Club", desc: "พักผ่อนเก็บตกและกลับไฟลท์ค่ำ", transport: "Metro", budget: "200 RMB" }
+            ]
+        };
+
+        let missionChart, budgetChart;
+
+        function initCharts() {
+            const mCtx = document.getElementById('missionChart').getContext('2d');
+            missionChart = new Chart(mCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Innovation', 'Spirituality', 'Aesthetics', 'Taste', 'Strategy'],
+                    datasets: [{
+                        data: [1, 1, 1, 1, 1],
+                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
+                        borderColor: '#0ea5e9',
+                        pointBackgroundColor: '#0ea5e9'
+                    }]
+                },
+                options: { maintainAspectRatio: false, scales: { r: { min: 0, max: 10, ticks: { display: false } } }, plugins: { legend: { display: false } } }
+            });
+
+            const bCtx = document.getElementById('budgetChart').getContext('2d');
+            budgetChart = new Chart(bCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['เดินทาง (HSR/Didi)', 'อาหาร (No Beef)', 'กิจกรรม/โชว์'],
+                    datasets: [{
+                        data: [1000, 1500, 800],
+                        backgroundColor: ['#0ea5e9', '#f59e0b', '#10b981']
+                    }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        function filterCity(city) {
+            const container = document.getElementById('timetable-content');
+            container.innerHTML = '';
+            
+            tripData[city].forEach(ev => {
+                const row = `
+                    <div class="flex flex-col md:flex-row p-5 hover:bg-slate-50 transition">
+                        <div class="md:w-32 font-bold text-slate-800 text-sm mb-1">${ev.day}<br>${ev.time}</div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-slate-900">${ev.activity}</h4>
+                            <p class="text-xs text-slate-500 mt-1">${ev.desc || ''}</p>
+                        </div>
+                        <div class="md:w-32 text-xs text-slate-400 mt-2 md:mt-0 italic">${ev.transport}</div>
+                        <div class="md:w-24 text-right font-bold text-sky-600 text-sm mt-2 md:mt-0">${ev.budget}</div>
+                    </div>
+                `;
+                container.innerHTML += row;
+            });
+
+            document.querySelectorAll('.city-btn').forEach(b => {
+                b.classList.remove('bg-sky-500', 'text-white');
+                b.classList.add('bg-white', 'text-slate-800');
+            });
+            document.getElementById('btn-' + city).classList.add('bg-sky-500', 'text-white');
+        }
+
+        function updateMissions() {
+            const checks = document.querySelectorAll('input[type="checkbox"]');
+            const total = checks.length;
+            const checked = Array.from(checks).filter(c => c.checked).length;
+            document.getElementById('global-progress').innerText = `ความสำเร็จรวม: ${Math.round(checked/total*100)}%`;
+
+            // Update stats
+            document.getElementById('stat-sz').innerText = `${Array.from(checks).slice(0,2).filter(c => c.checked).length}/2`;
+            document.getElementById('stat-ys').innerText = `${Array.from(checks).slice(2,4).filter(c => c.checked).length}/2`;
+            document.getElementById('stat-gz').innerText = `${Array.from(checks).slice(4,6).filter(c => c.checked).length}/2`;
+            document.getElementById('stat-food').innerText = `${document.getElementById('m7').checked ? 1 : 0}/1`;
+
+            // Update Radar Chart (simplified logic)
+            missionChart.data.datasets[0].data = [
+                Array.from(checks).slice(0,2).filter(c => c.checked).length * 5,
+                Array.from(checks).slice(2,4).filter(c => c.checked).length * 5,
+                Array.from(checks).slice(4,6).filter(c => c.checked).length * 5,
+                document.getElementById('m7').checked ? 10 : 2,
+                checked + 1
+            ];
+            missionChart.update();
+        }
+
+        window.onload = function() {
+            initCharts();
+            filterCity('SZ');
+            updateMissions();
+        };
+    </script>
+</body>
+</html>

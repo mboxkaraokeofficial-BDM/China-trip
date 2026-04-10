@@ -1,0 +1,697 @@
+{
+  "trip": {
+    "title": "China Trip — April 2026",
+    "travelers": {
+      "group_a": {
+        "label": "Group A",
+        "count": 7,
+        "notes": "Elderly travelers"
+      },
+      "group_b": {
+        "label": "Group B",
+        "members": ["Pamelosam", "Patty"],
+        "count": 2
+      }
+    },
+    "dates": { "start": "2026-04-11", "end": "2026-04-19" }
+  },
+
+  "flights": [
+    {
+      "id": "F1",
+      "flight_no": "CZ8158",
+      "airline": "China Southern",
+      "group": "all",
+      "direction": "outbound",
+      "from": { "city": "Bangkok", "airport": "Suvarnabhumi", "code": "BKK" },
+      "to":   { "city": "Shenzhen", "airport": "Bao'an International", "code": "SZX" },
+      "depart": "2026-04-11T02:40:00",
+      "arrive": "2026-04-11T07:05:00",
+      "duration_min": 205
+    },
+    {
+      "id": "F2",
+      "flight_no": "CZ357",
+      "airline": "China Southern",
+      "group": "group_a",
+      "direction": "return",
+      "from": { "city": "Guangzhou", "airport": "Baiyun International", "code": "CAN" },
+      "to":   { "city": "Bangkok", "airport": "Suvarnabhumi", "code": "BKK" },
+      "depart": "2026-04-18T08:15:00",
+      "arrive": "2026-04-18T10:20:00",
+      "duration_min": 185,
+      "alert": "Leave hotel 06:00 · Airport check-in 07:00"
+    },
+    {
+      "id": "F3",
+      "flight_no": "CZ357",
+      "airline": "China Southern",
+      "group": "group_b",
+      "direction": "return",
+      "from": { "city": "Guangzhou", "airport": "Baiyun International", "code": "CAN" },
+      "to":   { "city": "Bangkok", "airport": "Suvarnabhumi", "code": "BKK" },
+      "depart": "2026-04-19T08:15:00",
+      "arrive": "2026-04-19T10:20:00",
+      "duration_min": 185,
+      "alert": "Leave hotel 06:00 · Airport check-in 07:00"
+    }
+  ],
+
+  "trains": [
+    {
+      "id": "T1",
+      "train_no": "G9208",
+      "type": "High-Speed",
+      "from": { "city": "Shenzhen", "station": "Shenzhen North" },
+      "to":   { "city": "Yangshuo", "station": "Yangshuo" },
+      "depart": "2026-04-13T12:52:00",
+      "arrive": "2026-04-13T15:30:00",
+      "duration_min": 158,
+      "alert": "Arrive Shenzhen North by 11:50 (1 hr early)"
+    },
+    {
+      "id": "T2",
+      "train_no": "D1835",
+      "type": "High-Speed",
+      "from": { "city": "Yangshuo", "station": "Yangshuo" },
+      "to":   { "city": "Guangzhou", "station": "Guangzhou South" },
+      "depart": "2026-04-15T14:51:00",
+      "arrive": "2026-04-15T17:19:00",
+      "duration_min": 148,
+      "alert": "Arrive Yangshuo station by 13:50 (1 hr early)"
+    }
+  ],
+
+  "hotels": [
+    {
+      "id": "H1",
+      "name": "Ji Hotel Nanshan Tech Park Changyuan",
+      "city": "Shenzhen",
+      "area": "Hi-Tech Park, Nanshan",
+      "metro": "Hi-Tech Park Line 1",
+      "checkin":  "2026-04-11",
+      "checkout": "2026-04-13",
+      "notes": "Check-in 14:00. Drop bags on arrival morning."
+    },
+    {
+      "id": "H2",
+      "name": "Feiwo Buke Hotel",
+      "city": "Yangshuo",
+      "area": "Yangshuo, Guilin",
+      "checkin":  "2026-04-13",
+      "checkout": "2026-04-15",
+      "notes": "Karst mountains area. 2 nights."
+    },
+    {
+      "id": "H3",
+      "name": "Mandarin Oriental Guangzhou",
+      "city": "Guangzhou",
+      "area": "Tianhe District",
+      "address": "389 Tian He Dong Lu, Tianhe",
+      "phone": "+86 20 3808 8888",
+      "rating": 4.5,
+      "checkin":  "2026-04-15",
+      "checkout_a": "2026-04-18",
+      "checkout_b": "2026-04-19",
+      "notes": "Group A checkout Apr 18 (early 06:00). Group B checkout Apr 19."
+    }
+  ],
+
+  "itinerary": [
+
+    {
+      "day": 1,
+      "date": "2026-04-11",
+      "city": "Shenzhen",
+      "title": "Arrival + Nanshan / Shekou",
+      "theme": "Easy arrival day — stay near hotel",
+      "places": [
+        {
+          "time": "07:05", "name": "Arrive Shenzhen Bao'an Airport",
+          "type": "transport", "lat": 22.6393, "lng": 113.8097,
+          "metro": "Airport Line 11",
+          "notes": "Metro to Ji Hotel. Check-in 14:00, drop bags."
+        },
+        {
+          "time": "09:00", "name": "Nantou Ancient City 南头古城",
+          "type": "culture", "lat": 22.5378, "lng": 113.9218,
+          "metro": "Nantou Ancient City Exit C",
+          "rating": 4.3, "admission": "Free",
+          "notes": "1,700-yr walled city turned creative district. Cafes + history."
+        },
+        {
+          "time": "11:00", "name": "MixC World 万象天地",
+          "type": "shopping", "lat": 22.5412, "lng": 113.9447,
+          "metro": "Hi-Tech Park Exit A",
+          "rating": 4.7, "hours": "10:00–22:00",
+          "notes": "Premium lifestyle mall with rotating art installations."
+        },
+        {
+          "time": "13:00", "name": "Shenzhen Bay Park",
+          "type": "nature", "lat": 22.5127, "lng": 113.9499,
+          "metro": "Shenzhen Bay Park Station",
+          "rating": 4.7, "admission": "Free",
+          "notes": "Coastal park. Views of HK. Great sunset spot."
+        },
+        {
+          "time": "14:30", "name": "Nanhai E-Cool 南海艺库",
+          "type": "culture", "lat": 22.4893, "lng": 113.9064,
+          "metro": "Shuiwan Exit D",
+          "rating": 4.1,
+          "notes": "Factory-turned art/cafe district. Ceramics, galleries."
+        },
+        {
+          "time": "16:00", "name": "Floatie Cafe",
+          "type": "food", "lat": 22.4840, "lng": 113.9030,
+          "metro": "Sea World Station",
+          "notes": "Sea view. Szechuan fries + beef rolls."
+        },
+        {
+          "time": "18:00", "name": "Lost Chili",
+          "type": "food", "lat": 22.4851, "lng": 113.9024,
+          "metro": "Sea World Station",
+          "notes": "Asian fusion. Good for photos."
+        },
+        {
+          "time": "19:30", "name": "Song Hotpot Factory",
+          "type": "food", "lat": 22.4845, "lng": 113.9027,
+          "metro": "Sea World Station",
+          "notes": "Hotpot + staff dance performance between courses!"
+        }
+      ]
+    },
+
+    {
+      "day": 2,
+      "date": "2026-04-12",
+      "city": "Shenzhen",
+      "title": "Huaqiangbei Electronics + Futian Full Day",
+      "theme": "MBOX sourcing + Art + Light Show",
+      "places": [
+        {
+          "time": "09:30", "name": "Huaqiang Electronic World 华强电子世界",
+          "type": "electronics", "lat": 22.5478, "lng": 114.0936,
+          "metro": "Huaqiang Road Exit A",
+          "rating": 4.4, "hours": "10:00–21:00",
+          "notes": "World's largest electronics market. MBOX sourcing."
+        },
+        {
+          "time": "10:30", "name": "Yuanwang Digital Mall 远望数码商城",
+          "type": "electronics", "lat": 22.5467, "lng": 114.0952,
+          "metro": "Huaqiang Road",
+          "notes": "Mobile phones, 2nd-hand devices, accessories."
+        },
+        {
+          "time": "11:30", "name": "Longsheng Accessories City 龙胜配件城",
+          "type": "electronics", "lat": 22.5490, "lng": 114.0910,
+          "metro": "Huaqiang Road",
+          "rating": 3.4,
+          "notes": "3C accessories wholesale."
+        },
+        {
+          "time": "12:00", "name": "SEG + Tongtiandi Markets",
+          "type": "electronics", "lat": 22.5471, "lng": 114.0944,
+          "metro": "Huaqiang North",
+          "rating": 4.2,
+          "notes": "2nd-hand phones + gear. All walkable cluster."
+        },
+        {
+          "time": "13:00", "name": "Fan Lou 繁楼 — Dim Sum",
+          "type": "food", "lat": 22.5476, "lng": 114.0899,
+          "metro": "Huaqiangbei Exit C",
+          "rating": 4.5,
+          "notes": "Thin-skin har gow, chicken feet, satay tripe."
+        },
+        {
+          "time": "14:45", "name": "Zhongshuge Bookshop 钟书阁",
+          "type": "culture", "lat": 22.5601, "lng": 113.8870,
+          "metro": "Linhai Exit B1",
+          "notes": "Famous spiral bookstore. Instagram landmark."
+        },
+        {
+          "time": "15:45", "name": "MOCAPE Museum",
+          "type": "culture", "lat": 22.5395, "lng": 114.0565,
+          "metro": "Children's Palace Exit A2",
+          "rating": 4.6, "admission": "Free",
+          "notes": "Contemporary Art + City Planning. Stunning architecture."
+        },
+        {
+          "time": "16:45", "name": "OCT Loft Creative Park",
+          "type": "culture", "lat": 22.5437, "lng": 113.9899,
+          "metro": "Qiaocheng East Exit A",
+          "rating": 3.3,
+          "notes": "Old factory turned art + cafe district."
+        },
+        {
+          "time": "17:30", "name": "Upperhills 深业上城",
+          "type": "shopping", "lat": 22.5444, "lng": 114.0579,
+          "metro": "Donggualing Exit A/E",
+          "rating": 4.7,
+          "notes": "Rooftop outdoor mall. Fashion + art."
+        },
+        {
+          "time": "19:00", "name": "Coconut Chicken Hotpot 润园四季",
+          "type": "food", "lat": 22.5401, "lng": 114.0521,
+          "metro": "Shopping Park",
+          "rating": 4.2,
+          "notes": "Shenzhen signature — chicken in fresh coconut broth."
+        },
+        {
+          "time": "19:30", "name": "Civic Center Light Show ⚠️",
+          "type": "attraction", "lat": 22.5395, "lng": 114.0565,
+          "metro": "Children's Palace",
+          "admission": "Free",
+          "alert": "Book via WeChat in advance! Saturday only.",
+          "notes": "15-min show. Arrive 19:15."
+        },
+        {
+          "time": "20:30", "name": "COCO Park",
+          "type": "shopping", "lat": 22.5398, "lng": 114.0529,
+          "metro": "Shopping Park Exit C",
+          "rating": 4.3,
+          "notes": "Cafes + bars + restaurants."
+        }
+      ]
+    },
+
+    {
+      "day": 3,
+      "date": "2026-04-13",
+      "city": "Shenzhen → Yangshuo",
+      "title": "Check-Out → Train G9208 → Yangshuo",
+      "theme": "Short morning then depart",
+      "alert": "Leave hotel 11:00 · G9208 departs Shenzhen North 12:52",
+      "places": [
+        {
+          "time": "08:00", "name": "Ji Hotel — Breakfast + Check-Out",
+          "type": "hotel",
+          "notes": "Pack. Check-out by 12:00."
+        },
+        {
+          "time": "09:00", "name": "Dongmen Walking Street (optional)",
+          "type": "shopping", "lat": 22.5461, "lng": 114.1181,
+          "metro": "Laojie Exit A",
+          "rating": 4.5,
+          "notes": "Only if time allows."
+        },
+        {
+          "time": "11:00", "name": "Metro → Shenzhen North Station",
+          "type": "transport",
+          "metro": "Line 1 → Line 4 (~35 min)",
+          "notes": "Allow time for security."
+        },
+        {
+          "time": "12:52", "name": "🚄 G9208 Departs Shenzhen North",
+          "type": "transport", "lat": 22.6094, "lng": 114.0280,
+          "notes": "Arrive Yangshuo 15:30 · ~2h 38m"
+        },
+        {
+          "time": "15:30", "name": "Arrive Yangshuo · Check-In Feiwo Buke",
+          "type": "hotel", "lat": 24.7787, "lng": 110.4972,
+          "notes": "Feiwo Buke Hotel. Rest + explore West Street."
+        }
+      ]
+    },
+
+    {
+      "day": 4,
+      "date": "2026-04-14",
+      "city": "Yangshuo",
+      "title": "Yangshuo Exploration",
+      "theme": "Karst mountains · Li River · Village life",
+      "places": [
+        {
+          "time": "07:00", "name": "Li River Bamboo Raft at Dawn",
+          "type": "nature", "lat": 24.8195, "lng": 110.5018,
+          "notes": "Best light in early morning. Book night before."
+        },
+        {
+          "time": "10:00", "name": "Yulong River Cycling + Bridge",
+          "type": "nature", "lat": 24.7168, "lng": 110.4328,
+          "admission": "Free",
+          "notes": "Rent bikes. Famous photo spot."
+        },
+        {
+          "time": "12:00", "name": "Local Restaurant — Beer Fish 啤酒鱼",
+          "type": "food", "lat": 24.7771, "lng": 110.4962,
+          "notes": "Yangshuo must-eat. Beer fish local specialty!"
+        },
+        {
+          "time": "14:00", "name": "Moon Hill 月亮山",
+          "type": "nature", "lat": 24.7061, "lng": 110.4765,
+          "notes": "45-min hike. Panoramic karst views."
+        },
+        {
+          "time": "16:00", "name": "Big Banyan Tree 大榕树",
+          "type": "nature", "lat": 24.7327, "lng": 110.5123,
+          "rating": 4.5,
+          "notes": "1,400-year-old banyan tree."
+        },
+        {
+          "time": "19:00", "name": "West Street 西街 Night Market",
+          "type": "shopping", "lat": 24.7771, "lng": 110.4955,
+          "notes": "Souvenirs + street food + night vibe."
+        },
+        {
+          "time": "20:30", "name": "Impression Liu Sanjie (optional)",
+          "type": "attraction", "lat": 24.8003, "lng": 110.4867,
+          "notes": "Zhang Yimou night show on Li River. Book ahead."
+        }
+      ]
+    },
+
+    {
+      "day": 5,
+      "date": "2026-04-15",
+      "city": "Yangshuo → Guangzhou",
+      "title": "Check-Out → Train D1835 → Guangzhou",
+      "theme": "Morning free · Depart 14:51",
+      "alert": "Leave hotel 13:30 · D1835 departs Yangshuo 14:51",
+      "places": [
+        {
+          "time": "08:00", "name": "Morning Walk — Countryside fields",
+          "type": "nature", "lat": 24.7787, "lng": 110.4972,
+          "admission": "Free",
+          "notes": "Rice paddies + karst morning light."
+        },
+        {
+          "time": "10:00", "name": "Feiwo Buke — Check-Out",
+          "type": "hotel",
+          "notes": "Pack. Check-out by 12:00."
+        },
+        {
+          "time": "13:30", "name": "Taxi → Yangshuo Station",
+          "type": "transport",
+          "notes": "~10 min to station."
+        },
+        {
+          "time": "14:51", "name": "🚄 D1835 Departs Yangshuo",
+          "type": "transport", "lat": 24.7787, "lng": 110.4972,
+          "notes": "Arrive Guangzhou South 17:19 · ~2h 28m"
+        },
+        {
+          "time": "17:19", "name": "Arrive GZ South → Mandarin Oriental",
+          "type": "hotel", "lat": 23.1342, "lng": 113.3254,
+          "notes": "Metro or taxi to hotel. Check-in 15:00 (late ok)."
+        }
+      ]
+    },
+
+    {
+      "day": 6,
+      "date": "2026-04-15",
+      "city": "Guangzhou",
+      "title": "Arrive + Old Town Full Day",
+      "theme": "Liwan Old Town — food, culture, night walk",
+      "places": [
+        {
+          "time": "14:30", "name": "Wu Cai Ji Noodle 吴财记 — Lunch",
+          "type": "food", "lat": 23.1085, "lng": 113.2405,
+          "rating": 4.0, "award": "Michelin Bib 7 yrs",
+          "notes": "Wonton noodle + fried wonton. Go afternoon for shorter queue."
+        },
+        {
+          "time": "16:00", "name": "Shamian Island 沙面岛",
+          "type": "sightseeing", "lat": 23.1078, "lng": 113.2445,
+          "rating": 4.3, "admission": "Free",
+          "notes": "Colonial architecture. Banyan trees + riverside."
+        },
+        {
+          "time": "17:30", "name": "Yong Qing Fang 永庆坊",
+          "type": "culture", "lat": 23.1148, "lng": 113.2374,
+          "rating": 4.5,
+          "notes": "Bruce Lee ancestral home. Canal + lanterns at night."
+        },
+        {
+          "time": "19:15", "name": "Dafo Temple 大佛寺 — Night",
+          "type": "culture", "lat": 23.1214, "lng": 113.2678,
+          "rating": 4.7, "admission": "Free",
+          "notes": "Spectacular night lighting."
+        },
+        {
+          "time": "20:00", "name": "Tao Tao Ju 陶陶居 — Dinner",
+          "type": "food", "lat": 23.1190, "lng": 113.2700,
+          "rating": 4.4, "award": "Michelin 2022",
+          "alert": "Book ahead via WeChat!",
+          "notes": "Roasted pigeon + red skin cheong fun."
+        }
+      ]
+    },
+
+    {
+      "day": 7,
+      "date": "2026-04-16",
+      "city": "Guangzhou",
+      "title": "Canton Fair Day 1",
+      "theme": "Fair group: Hall 2.1–2.2 | Free group: Shopping + Architecture",
+      "groups": true,
+      "places": [
+        {
+          "time": "09:30", "name": "Canton Fair Complex — Phase 2",
+          "type": "business", "group": "fair",
+          "lat": 23.1041, "lng": 113.3579,
+          "rating": 4.7,
+          "notes": "Electronics, AV, Consumer. Hall 2.1–2.2. Download Canton Fair App."
+        },
+        {
+          "time": "09:30", "name": "Shi San Hang 十三行 No.1",
+          "type": "shopping", "group": "free",
+          "lat": 23.1107, "lng": 113.2508,
+          "rating": 4.5, "hours": "10:00–22:00",
+          "notes": "Cheapest wholesale. Go early before crowds."
+        },
+        {
+          "time": "11:30", "name": "Baima Market 白马大厦 No.2",
+          "type": "shopping", "group": "free",
+          "lat": 23.1467, "lng": 113.2542,
+          "rating": 4.4, "hours": "08:00–18:00",
+          "alert": "Closes 18:00!",
+          "notes": "Premium brands wholesale."
+        },
+        {
+          "time": "13:30", "name": "New Asian Electronic City",
+          "type": "electronics", "group": "free",
+          "lat": 23.1090, "lng": 113.2532,
+          "rating": 4.2, "hours": "10:00–20:00",
+          "notes": "Electronics wholesale + retail."
+        },
+        {
+          "time": "15:30", "name": "Guangzhou Opera House — Zaha Hadid",
+          "type": "architecture", "group": "free",
+          "lat": 23.1152, "lng": 113.3219,
+          "rating": 4.6, "admission": "Free (exterior)",
+          "notes": "Masterpiece. Free exterior + plaza."
+        },
+        {
+          "time": "17:30", "name": "Haixin Bridge + Pearl River Sunset",
+          "type": "sightseeing", "group": "all",
+          "lat": 23.1045, "lng": 113.3285,
+          "rating": 4.7,
+          "notes": "Golden hour. Best photo spot in Guangzhou."
+        },
+        {
+          "time": "19:00", "name": "Canton Tower — Night View",
+          "type": "attraction", "group": "all",
+          "lat": 23.1075, "lng": 113.3240,
+          "rating": 4.6,
+          "notes": "Iconic at night. Free from Hongcheng Park."
+        },
+        {
+          "time": "20:00", "name": "Dian Dou De 点都德 — Dinner",
+          "type": "food", "group": "all",
+          "lat": 23.1180, "lng": 113.3309,
+          "rating": 4.4, "hours": "11:00–22:30",
+          "notes": "Canton dim sum dinner."
+        }
+      ]
+    },
+
+    {
+      "day": 8,
+      "date": "2026-04-17",
+      "city": "Guangzhou",
+      "title": "Canton Fair Day 2 + Afternoon Free",
+      "theme": "Fair exits 13:00 · Art + Shopping + Night out",
+      "alert": "Tonight: Pre-book taxi for Group A departure 06:00 Apr 18!",
+      "groups": true,
+      "places": [
+        {
+          "time": "09:00", "name": "Canton Fair Day 2 (exit ~13:00)",
+          "type": "business", "group": "fair",
+          "lat": 23.1041, "lng": 113.3579,
+          "notes": "Follow-up contacts. Exit by 13:00."
+        },
+        {
+          "time": "09:00", "name": "Zhongda Fabric Market 中大布市",
+          "type": "shopping", "group": "free",
+          "lat": 23.0795, "lng": 113.2954,
+          "rating": 4.6,
+          "notes": "Largest fabric + accessories market in China."
+        },
+        {
+          "time": "10:00", "name": "Sha He Garment Market No.4",
+          "type": "shopping", "group": "free",
+          "lat": 23.1528, "lng": 113.3093,
+          "rating": 4.2,
+          "notes": "Reseller favorite. Streetwear + fashion."
+        },
+        {
+          "time": "11:30", "name": "UUS Clothing Market No.5",
+          "type": "shopping", "group": "free",
+          "lat": 23.1481, "lng": 113.2495,
+          "rating": 4.1,
+          "notes": "9 floors. Individual buyers friendly."
+        },
+        {
+          "time": "13:00", "name": "Lei Garden 利苑 — Lunch",
+          "type": "food", "group": "all",
+          "lat": 23.1164, "lng": 113.3217,
+          "rating": 4.2,
+          "notes": "Upscale dim sum. Book ahead."
+        },
+        {
+          "time": "15:00", "name": "Dong Shan Kou 东山口",
+          "type": "culture", "group": "all",
+          "lat": 23.1240, "lng": 113.2954,
+          "notes": "Galleries + old brick + cafes. Best IG spot."
+        },
+        {
+          "time": "16:30", "name": "Haus of Nowhere — Gentle Monster",
+          "type": "culture", "group": "all",
+          "lat": 23.1406, "lng": 113.3173,
+          "admission": "Free",
+          "notes": "Surreal art installations."
+        },
+        {
+          "time": "17:30", "name": "Pan Tang Village 泮塘村",
+          "type": "culture", "group": "all",
+          "lat": 23.1243, "lng": 113.2360,
+          "notes": "Hidden village + cafes. Old GZ architecture."
+        },
+        {
+          "time": "19:00", "name": "Saturndays Cafe 星期六极好",
+          "type": "food", "group": "all",
+          "lat": 23.1130, "lng": 113.2450,
+          "notes": "Courtyard villa. Cocktails + DJ. Cat JIJI."
+        }
+      ]
+    },
+
+    {
+      "day": 9,
+      "date": "2026-04-18",
+      "city": "Guangzhou → Bangkok",
+      "title": "Fly Home",
+      "theme": "Group A: Apr 18 CZ357 · Group B: Apr 19 CZ357",
+      "alert": "BOTH GROUPS: Leave hotel 06:00 · CZ357 08:15 · Check-in 07:00",
+      "groups": true,
+      "places": [
+        {
+          "time": "06:00", "name": "Group A — Depart to Airport",
+          "type": "transport", "group": "group_a",
+          "notes": "Pre-booked taxi. CZ357 departs 08:15 Apr 18."
+        },
+        {
+          "time": "08:30", "name": "Zhongda Fabric + Hui Mei Markets",
+          "type": "shopping", "group": "group_b",
+          "lat": 23.0795, "lng": 113.2954,
+          "notes": "Last morning shopping for Group B."
+        },
+        {
+          "time": "10:30", "name": "Silver Light 银灯食府 — Brunch",
+          "type": "food", "group": "group_b",
+          "lat": 23.1159, "lng": 113.2656,
+          "rating": 4.2,
+          "notes": "Last yam cha. Ma Lai Gao with filling!"
+        },
+        {
+          "time": "06:00", "name": "Group B — Depart to Airport (Apr 19)",
+          "type": "transport", "group": "group_b",
+          "notes": "Check-out Apr 19. CZ357 departs 08:15 Apr 19."
+        }
+      ]
+    }
+
+  ],
+
+  "food_guide": {
+    "guangzhou": [
+      { "name": "Tao Tao Ju 陶陶居", "type": "dim_sum", "rating": 4.4, "award": "Michelin 2022", "address": "168 Beijing Rd, L7", "must_try": ["Roasted pigeon", "Red skin cheong fun", "Taro balls"], "alert": "Book ahead via WeChat" },
+      { "name": "Dian Dou De 点都德", "type": "dim_sum", "rating": 4.4, "hours": "11:00–22:30", "must_try": ["Taro dumpling", "Har gow", "King siu mai"] },
+      { "name": "Lei Garden 利苑", "type": "dim_sum", "rating": 4.2, "notes": "Upscale. Book ahead." },
+      { "name": "Wu Cai Ji 吴财记", "type": "noodles", "rating": 4.0, "award": "Michelin Bib 7 yrs", "must_try": ["Wonton noodle", "Fried wonton"] },
+      { "name": "Silver Light 银灯食府", "type": "yum_cha", "rating": 4.2, "must_try": ["Ma Lai Gao with filling"] }
+    ],
+    "shenzhen": [
+      { "name": "Fan Lou 繁楼", "type": "dim_sum", "rating": 4.5, "must_try": ["Har gow", "Chicken feet"] },
+      { "name": "Coconut Chicken Hotpot 润园四季", "type": "hotpot", "rating": 4.2 },
+      { "name": "Song Hotpot Factory", "type": "hotpot", "notes": "Staff dance between courses!" }
+    ],
+    "yangshuo": [
+      { "name": "Beer Fish 啤酒鱼", "type": "local", "notes": "Yangshuo must-eat. Beer fish local specialty." }
+    ],
+    "must_try_dishes": [
+      "Rice Noodle Rolls (Cheong Fun)",
+      "Har Gow (shrimp dumplings)",
+      "Roast Goose",
+      "Wonton Noodle",
+      "Congee (Jook)",
+      "Coconut Chicken Hotpot",
+      "Red Skin Cheong Fun",
+      "Tong Sui (dessert soup)"
+    ]
+  },
+
+  "shopping_guide": {
+    "guangzhou_clothing": [
+      { "rank": 1, "name": "Shi San Hang 十三行", "hours": "10:00–22:00", "notes": "Cheapest wholesale" },
+      { "rank": 2, "name": "Baima Market 白马大厦", "hours": "08:00–18:00", "alert": "Closes 18:00!", "notes": "Premium brands" },
+      { "rank": 3, "name": "apM Mall", "notes": "280,000 sqm mega mall" },
+      { "rank": 4, "name": "Sha He Garment Market", "notes": "Reseller favorite. Streetwear." },
+      { "rank": 5, "name": "UUS Clothing Market", "notes": "9 floors. Individual buyers." },
+      { "rank": 6, "name": "Hui Mei International", "notes": "High-quality floors 2+" }
+    ],
+    "guangzhou_fabric_electronics": [
+      { "name": "Zhongda Fabric Market", "rating": 4.6, "notes": "Largest fabric in China" },
+      { "name": "New Asian Electronic City", "rating": 4.2, "hours": "10:00–20:00" }
+    ],
+    "shenzhen_electronics": [
+      { "name": "Huaqiang Electronic World", "rating": 4.4, "hours": "10:00–21:00", "notes": "MBOX sourcing" },
+      { "name": "Yuanwang Digital Mall", "notes": "2nd-hand devices" },
+      { "name": "Longsheng Accessories City", "notes": "Wholesale 3C" },
+      { "name": "SEG + Tongtiandi", "notes": "Phones + gear" }
+    ]
+  },
+
+  "logistics": {
+    "transport": {
+      "shenzhen": {
+        "payment": "WeChat Pay / Alipay QR",
+        "airport_to_hotel": "Line 11 → Line 1 (~50 min)",
+        "hotel_to_north_station": "Line 1 → Line 4 (~35 min)",
+        "taxi_app": "DiDi"
+      },
+      "guangzhou": {
+        "payment": "WeChat Pay / Alipay QR",
+        "to_canton_fair": "Tianhe → Pazhou Line 8 (~25 min)",
+        "to_airport": "Metro ~45 min | Taxi ~60 min",
+        "note": "Allow 3 hrs before departure"
+      }
+    },
+    "apps": ["WeChat", "Alipay", "DiDi", "Canton Fair App", "Maps.me", "12306"],
+    "book_ahead": [
+      "Tao Tao Ju — WeChat reservation",
+      "Civic Center Light Show — WeChat (Saturday only!)",
+      "Canton Tower Sky Deck — Trip.com",
+      "Train G9208 + D1835 — 12306 App",
+      "Taxi Group A Apr 18 — book Apr 17 night"
+    ],
+    "critical_alerts": [
+      "Link Alipay + WeChat Pay card before departure",
+      "Notify bank for overseas card use",
+      "Canton Fair Badge — register + download app",
+      "VPN — install before flying (blocked in China)",
+      "Plug adapter — Chinese type differs from Thai"
+    ]
+  }
+}

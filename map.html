@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🗺 Route Map — China Trip Apr 2026</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#1a1008;--paper:#faf6f0;--gold:#c8962a;--jade:#2e7d6b;
+  --sky:#2c5f8a;--red:#c0392b;--muted:#8b7355;--line:#d4c4a8;--card:#fff9f0;
+}
+body{background:var(--paper);color:var(--ink);font-family:'Sarabun',system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* TOP BAR */
+.topbar{background:var(--ink);padding:.6rem 1rem;display:flex;align-items:center;gap:.75rem;flex-shrink:0;flex-wrap:wrap}
+.topbar-title{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--paper);font-weight:700;white-space:nowrap}
+.topbar-title span{color:var(--gold)}
+
+/* CITY TABS */
+.city-tabs{display:flex;gap:.3rem;margin-left:auto}
+.city-btn{padding:.3rem .9rem;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);
+  font-size:.7rem;font-family:'Space Mono',monospace;cursor:pointer;border-radius:4px;transition:all .2s;white-space:nowrap}
+.city-btn.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
+.city-btn:hover:not(.active){background:rgba(255,255,255,.1);color:white}
+
+/* DAY FILTER */
+.daybar{background:#111;padding:.4rem 1rem;display:flex;gap:.25rem;overflow-x:auto;flex-shrink:0;align-items:center}
+.day-label{font-family:'Space Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.4);white-space:nowrap;margin-right:.25rem}
+.day-btn{padding:.25rem .65rem;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);
+  font-size:.65rem;font-family:'Space Mono',monospace;cursor:pointer;border-radius:3px;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.day-btn.active{color:white;font-weight:700}
+.day-btn[data-city="sz"].active{background:var(--sky);border-color:var(--sky)}
+.day-btn[data-city="yl"].active{background:var(--jade);border-color:var(--jade)}
+.day-btn[data-city="gz"].active{background:var(--red);border-color:var(--red)}
+
+/* MAP */
+#map{flex:1;min-height:0}
+
+/* BOTTOM PANEL */
+.bottom{background:var(--ink);flex-shrink:0;max-height:220px;overflow-y:auto;border-top:2px solid rgba(255,255,255,.08)}
+.place-list{display:flex;flex-direction:column;gap:0}
+.place-row{display:grid;grid-template-columns:2.8rem 1.2rem 1fr auto;gap:.3rem .5rem;align-items:start;
+  padding:.5rem 1rem;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .15s}
+.place-row:hover{background:rgba(255,255,255,.05)}
+.place-row.highlighted{background:rgba(200,150,42,.12)}
+.ptime{font-family:'Space Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.4);padding-top:.1rem}
+.pico{font-size:.8rem;padding-top:.05rem}
+.pname{font-size:.78rem;color:rgba(255,255,255,.85);font-weight:600;line-height:1.3}
+.pnote{font-size:.65rem;color:rgba(255,255,255,.4);margin-top:.1rem;line-height:1.3}
+.ptag{font-size:.55rem;padding:.05rem .3rem;border-radius:2px;font-family:'Space Mono',monospace;display:inline-block;margin-top:.15rem}
+.tag-free{background:rgba(46,125,107,.2);color:#80cbc4}
+.tag-warn{background:rgba(192,57,43,.2);color:#ef9a9a}
+.tag-star{background:rgba(200,150,42,.2);color:#ffd54f}
+.prat{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gold);padding-top:.1rem;white-space:nowrap}
+
+/* LEGEND */
+.legend{position:absolute;top:10px;right:10px;z-index:1000;background:rgba(26,16,8,.88);
+  border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:.6rem .8rem;min-width:120px}
+.leg-item{display:flex;align-items:center;gap:.4rem;padding:.15rem 0;font-size:.65rem;color:rgba(255,255,255,.7)}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* TYPE COLORS */
+.type-transport{background:#607d8b}
+.type-culture{background:#9c27b0}
+.type-shopping{background:#e91e63}
+.type-nature{background:#4caf50}
+.type-food{background:#ff5722}
+.type-electronics{background:#2196f3}
+.type-attraction{background:#ffc107}
+.type-hotel{background:#795548}
+.type-sightseeing{background:#00bcd4}
+.type-architecture{background:#673ab7}
+.type-business{background:#f44336}
+.type-default{background:#9e9e9e}
+
+/* GROUP BADGE */
+.gb{display:inline-block;font-size:.55rem;padding:.04rem .3rem;border-radius:2px;font-family:'Space Mono',monospace;font-weight:700;margin-right:.25rem}
+.gb-fair{background:rgba(192,57,43,.2);color:#ef9a9a}
+.gb-free{background:rgba(46,125,107,.2);color:#80cbc4}
+.gb-all{background:rgba(200,150,42,.2);color:#ffd54f}
+
+/* SUMMARY BAR */
+.summary{background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08);
+  padding:.35rem 1rem;display:flex;gap:1.2rem;font-size:.65rem;color:rgba(255,255,255,.5);
+  font-family:'Space Mono',monospace;flex-wrap:wrap}
+.summary strong{color:rgba(255,255,255,.85)}
+
+@media(max-width:500px){
+  .topbar{padding:.5rem .75rem}
+  .city-tabs{margin-left:0;width:100%}
+  .city-btn{flex:1;text-align:center}
+  .legend{display:none}
+  .pnote{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">🇨🇳 Route Map <span>Apr 2026</span></div>
+  <div class="city-tabs">
+    <button class="city-btn active" data-city="sz" onclick="setCity('sz',this)">🏙 Shenzhen</button>
+    <button class="city-btn" data-city="yl" onclick="setCity('yl',this)">🏔 Yangshuo</button>
+    <button class="city-btn" data-city="gz" onclick="setCity('gz',this)">🌆 Guangzhou</button>
+  </div>
+</div>
+
+<div class="daybar" id="daybar">
+  <span class="day-label">Day:</span>
+</div>
+
+<div style="position:relative;flex:1;display:flex;flex-direction:column;min-height:0">
+  <div id="map"></div>
+  <div class="legend" id="legend"></div>
+</div>
+
+<div class="summary" id="summary"></div>
+<div class="bottom"><div class="place-list" id="placeList"></div></div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────
+const CITIES = {
+  sz: { label:'Shenzhen', color:'#2c5f8a', center:[22.5431,114.0579], zoom:12 },
+  yl: { label:'Yangshuo', color:'#2e7d6b', center:[24.7787,110.4972], zoom:12 },
+  gz: { label:'Guangzhou', color:'#c0392b', center:[23.1170,113.2900], zoom:12 },
+};
+
+const TYPE_ICON = {
+  transport:'🚇', culture:'🏛', shopping:'🛍', nature:'🌿', food:'🍜',
+  electronics:'🔌', attraction:'✨', hotel:'🏨', sightseeing:'📍',
+  architecture:'🏗', business:'💼',
+};
+
+const DAYS = {
+  sz: [
+    {
+      day:1, date:'Apr 11 (Sat)', label:'Day 1 — Arrival + Nanshan',
+      places:[
+        {time:'07:05',name:"Arrive SZX Airport",type:'transport',lat:22.6393,lng:113.8097,notes:'Metro Line 11 to hotel'},
+        {time:'09:00',name:'Nantou Ancient City 南头古城',type:'culture',lat:22.5378,lng:113.9218,rating:4.3,free:true,notes:'1,700yr walled city'},
+        {time:'11:00',name:'MixC World 万象天地',type:'shopping',lat:22.5412,lng:113.9447,rating:4.7,hours:'10-22',notes:'Premium lifestyle mall'},
+        {time:'13:00',name:'Shenzhen Bay Park',type:'nature',lat:22.5127,lng:113.9499,rating:4.7,free:true,notes:'Coastal park. HK views'},
+        {time:'14:30',name:'Nanhai E-Cool 南海艺库',type:'culture',lat:22.4893,lng:113.9064,rating:4.1,notes:'Art/cafe district'},
+        {time:'16:00',name:'Floatie Cafe',type:'food',lat:22.4840,lng:113.9030,notes:'Sea view snacks'},
+        {time:'18:00',name:'Lost Chili',type:'food',lat:22.4851,lng:113.9024,notes:'Asian fusion'},
+        {time:'19:30',name:'Song Hotpot Factory',type:'food',lat:22.4845,lng:113.9027,notes:'Hotpot + staff dance!'},
+      ]
+    },
+    {
+      day:2, date:'Apr 12 (Sun)', label:'Day 2 — Electronics + Light Show',
+      places:[
+        {time:'09:30',name:'Huaqiang Electronic World',type:'electronics',lat:22.5478,lng:114.0936,rating:4.4,notes:'MBOX sourcing zone'},
+        {time:'10:30',name:'Yuanwang Digital Mall',type:'electronics',lat:22.5467,lng:114.0952,notes:'2nd-hand devices'},
+        {time:'11:30',name:'Longsheng Accessories City',type:'electronics',lat:22.5490,lng:114.0910,rating:3.4,notes:'3C wholesale'},
+        {time:'12:00',name:'SEG + Tongtiandi Markets',type:'electronics',lat:22.5471,lng:114.0944,rating:4.2,notes:'Phones + gear'},
+        {time:'13:00',name:'Fan Lou 繁楼 — Dim Sum',type:'food',lat:22.5476,lng:114.0899,rating:4.5,notes:'Har gow, chicken feet'},
+        {time:'14:45',name:'Zhongshuge Bookshop 钟书阁',type:'culture',lat:22.5601,lng:113.8870,notes:'Spiral bookstore'},
+        {time:'15:45',name:'MOCAPE Museum',type:'culture',lat:22.5395,lng:114.0565,rating:4.6,free:true,notes:'Contemporary Art. Free!'},
+        {time:'16:45',name:'OCT Loft Creative Park',type:'culture',lat:22.5437,lng:113.9899,rating:3.3,notes:'Factory → art district'},
+        {time:'17:30',name:'Upperhills 深业上城',type:'shopping',lat:22.5444,lng:114.0579,rating:4.7,notes:'Rooftop mall'},
+        {time:'19:00',name:'Coconut Chicken Hotpot',type:'food',lat:22.5401,lng:114.0521,rating:4.2,notes:'SZ signature dish'},
+        {time:'19:30',name:'⚠️ Civic Center Light Show',type:'attraction',lat:22.5395,lng:114.0565,alert:'Book WeChat! Sat only',notes:'15-min. Arrive 19:15'},
+        {time:'20:30',name:'COCO Park',type:'shopping',lat:22.5398,lng:114.0529,rating:4.3,notes:'Bars + restaurants'},
+      ]
+    },
+    {
+      day:3, date:'Apr 13 (Mon)', label:'Day 3 — Check-Out → Train',
+      alert:'Leave hotel 11:00 · G9208 departs 12:52',
+      places:[
+        {time:'08:00',name:'Ji Hotel — Check-Out',type:'hotel',lat:22.5412,lng:113.9447,notes:'Breakfast + pack'},
+        {time:'09:00',name:'Dongmen Walking Street (opt)',type:'shopping',lat:22.5461,lng:114.1181,rating:4.5,notes:'Only if time allows'},
+        {time:'11:00',name:'Metro → Shenzhen North',type:'transport',lat:22.5412,lng:113.9447,notes:'Line 1 → Line 4 ~35min'},
+        {time:'12:52',name:'🚄 G9208 Departs → Yangshuo',type:'transport',lat:22.6094,lng:114.0280,notes:'Arrive Yangshuo 15:30'},
+      ]
+    },
+  ],
+
+  yl: [
+    {
+      day:4, date:'Apr 14 (Tue)', label:'Day 4 — Yangshuo Explore',
+      places:[
+        {time:'07:00',name:'Li River Bamboo Raft at Dawn',type:'nature',lat:24.8195,lng:110.5018,notes:'Book night before'},
+        {time:'10:00',name:'Yulong River Cycling + Bridge',type:'nature',lat:24.7168,lng:110.4328,free:true,notes:'Rent bikes. Photo spot'},
+        {time:'12:00',name:'Beer Fish Restaurant 啤酒鱼',type:'food',lat:24.7771,lng:110.4962,notes:'Yangshuo must-eat!'},
+        {time:'14:00',name:'Moon Hill 月亮山',type:'nature',lat:24.7061,lng:110.4765,notes:'45-min hike. Karst views'},
+        {time:'16:00',name:'Big Banyan Tree 大榕树',type:'nature',lat:24.7327,lng:110.5123,rating:4.5,notes:'1,400-yr old tree'},
+        {time:'19:00',name:'West Street 西街 Night Market',type:'shopping',lat:24.7771,lng:110.4955,notes:'Souvenirs + street food'},
+        {time:'20:30',name:'Impression Liu Sanjie (opt)',type:'attraction',lat:24.8003,lng:110.4867,notes:'Night show. Book ahead'},
+      ]
+    },
+    {
+      day:5, date:'Apr 15 (Wed)', label:'Day 5 — Check-Out → Train',
+      alert:'Leave hotel 13:30 · D1835 departs 14:51',
+      places:[
+        {time:'08:00',name:'Morning Walk — Rice Fields',type:'nature',lat:24.7787,lng:110.4972,free:true,notes:'Karst morning light'},
+        {time:'10:00',name:'Feiwo Buke — Check-Out',type:'hotel',lat:24.7787,lng:110.4972,notes:'Pack. Check-out 12:00'},
+        {time:'13:30',name:'Taxi → Yangshuo Station',type:'transport',lat:24.7787,lng:110.4972,notes:'~10 min'},
+        {time:'14:51',name:'🚄 D1835 → Guangzhou South',type:'transport',lat:24.7787,lng:110.4972,notes:'Arrive GZ 17:19 ~2h28m'},
+      ]
+    },
+  ],
+
+  gz: [
+    {
+      day:6, date:'Apr 15 (Wed)', label:'Day 6 — Arrive + Old Town',
+      places:[
+        {time:'17:30',name:'Mandarin Oriental — Check-In',type:'hotel',lat:23.1342,lng:113.3254,rating:4.5,notes:'Check-in late ok'},
+        {time:'14:30',name:'Wu Cai Ji Noodle 吴财记',type:'food',lat:23.1085,lng:113.2405,rating:4.0,award:'Michelin Bib',notes:'Wonton noodle soup'},
+        {time:'16:00',name:'Shamian Island 沙面岛',type:'sightseeing',lat:23.1078,lng:113.2445,rating:4.3,free:true,notes:'Colonial architecture'},
+        {time:'17:30',name:'Yong Qing Fang 永庆坊',type:'culture',lat:23.1148,lng:113.2374,rating:4.5,notes:'Bruce Lee home. Lanterns'},
+        {time:'19:15',name:'Dafo Temple 大佛寺 — Night',type:'culture',lat:23.1214,lng:113.2678,rating:4.7,free:true,notes:'Spectacular lighting'},
+        {time:'20:00',name:'Tao Tao Ju 陶陶居 — Dinner',type:'food',lat:23.1190,lng:113.2700,rating:4.4,award:'Michelin 2022',alert:'Book WeChat!',notes:'Roasted pigeon'},
+      ]
+    },
+    {
+      day:7, date:'Apr 16 (Thu)', label:'Day 7 — Canton Fair Day 1',
+      places:[
+        {time:'09:30',name:'Canton Fair — Hall 2.1–2.2',type:'business',group:'fair',lat:23.1041,lng:113.3579,rating:4.7,notes:'Electronics & AV'},
+        {time:'09:30',name:'Shi San Hang 十三行 No.1',type:'shopping',group:'free',lat:23.1107,lng:113.2508,rating:4.5,notes:'Cheapest wholesale'},
+        {time:'11:30',name:'Baima Market 白马 No.2',type:'shopping',group:'free',lat:23.1467,lng:113.2542,rating:4.4,alert:'Closes 18:00!',notes:'Premium brands'},
+        {time:'13:30',name:'New Asian Electronic City',type:'electronics',group:'free',lat:23.1090,lng:113.2532,rating:4.2,notes:'Electronics retail'},
+        {time:'15:30',name:'Opera House — Zaha Hadid',type:'architecture',group:'free',lat:23.1152,lng:113.3219,rating:4.6,free:true,notes:'Free exterior'},
+        {time:'17:30',name:'Haixin Bridge + Pearl River',type:'sightseeing',group:'all',lat:23.1045,lng:113.3285,rating:4.7,notes:'Golden hour!'},
+        {time:'19:00',name:'Canton Tower — Night View',type:'attraction',group:'all',lat:23.1075,lng:113.3240,rating:4.6,notes:'Free Hongcheng Park'},
+        {time:'20:00',name:'Dian Dou De 点都德 — Dinner',type:'food',group:'all',lat:23.1180,lng:113.3309,rating:4.4,notes:'Canton dim sum'},
+      ]
+    },
+    {
+      day:8, date:'Apr 17 (Fri)', label:'Day 8 — Canton Fair Day 2',
+      alert:'Tonight: Pre-book taxi for Group A 06:00 Apr 18!',
+      places:[
+        {time:'09:00',name:'Canton Fair Day 2 (exit 13:00)',type:'business',group:'fair',lat:23.1041,lng:113.3579,notes:'Follow-up contacts'},
+        {time:'09:00',name:'Zhongda Fabric Market 中大',type:'shopping',group:'free',lat:23.0795,lng:113.2954,rating:4.6,notes:'Largest fabric in China'},
+        {time:'10:00',name:'Sha He Market No.4',type:'shopping',group:'free',lat:23.1528,lng:113.3093,rating:4.2,notes:'Streetwear + fashion'},
+        {time:'11:30',name:'UUS Clothing Market No.5',type:'shopping',group:'free',lat:23.1481,lng:113.2495,rating:4.1,notes:'9 floors'},
+        {time:'13:00',name:'Lei Garden 利苑 — Lunch',type:'food',group:'all',lat:23.1164,lng:113.3217,rating:4.2,notes:'Upscale dim sum'},
+        {time:'15:00',name:'Dong Shan Kou 东山口',type:'culture',group:'all',lat:23.1240,lng:113.2954,notes:'Galleries + cafes'},
+        {time:'16:30',name:'Haus of Nowhere (Gentle Monster)',type:'culture',group:'all',lat:23.1406,lng:113.3173,free:true,notes:'Art installations'},
+        {time:'17:30',name:'Pan Tang Village 泮塘村',type:'culture',group:'all',lat:23.1243,lng:113.2360,notes:'Hidden village + cafes'},
+        {time:'19:00',name:'Saturndays Cafe — Cocktails + DJ',type:'food',group:'all',lat:23.1130,lng:113.2450,notes:'Courtyard. Cat JIJI 🐱'},
+      ]
+    },
+    {
+      day:9, date:'Apr 18–19', label:'Day 9 — Fly Home',
+      alert:'BOTH GROUPS: Leave hotel 06:00 · CZ357 08:15',
+      places:[
+        {time:'06:00',name:'Group A → Airport (Apr 18)',type:'transport',group:'fair',lat:23.3924,lng:113.2988,notes:'CZ357 08:15 Apr 18'},
+        {time:'08:30',name:'Zhongda + Hui Mei (Group B)',type:'shopping',group:'free',lat:23.0795,lng:113.2954,notes:'Last shopping'},
+        {time:'10:30',name:'Silver Light 银灯 — Brunch',type:'food',group:'free',lat:23.1159,lng:113.2656,rating:4.2,notes:'Ma Lai Gao! Last yam cha'},
+        {time:'06:00',name:'Group B → Airport (Apr 19)',type:'transport',group:'free',lat:23.3924,lng:113.2988,notes:'CZ357 08:15 Apr 19'},
+      ]
+    },
+  ],
+};
+
+// ── STATE ─────────────────────────────────────────────
+let currentCity = 'sz';
+let currentDay  = 1;
+let markerMap   = {};
+let leafletMap  = null;
+
+// ── MAP INIT ──────────────────────────────────────────
+function initMap() {
+  leafletMap = L.map('map', {zoomControl:true, scrollWheelZoom:true})
+    .setView(CITIES.sz.center, CITIES.sz.zoom);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution:'© OpenStreetMap © CARTO', maxZoom:19
+  }).addTo(leafletMap);
+}
+
+// ── RENDER ────────────────────────────────────────────
+function getTypeColor(type) {
+  const map = {
+    transport:'#607d8b', culture:'#9c27b0', shopping:'#e91e63',
+    nature:'#4caf50', food:'#ff5722', electronics:'#2196f3',
+    attraction:'#ffc107', hotel:'#795548', sightseeing:'#00bcd4',
+    architecture:'#673ab7', business:'#f44336',
+  };
+  return map[type] || '#9e9e9e';
+}
+
+function makeMarkerIcon(type, highlight) {
+  const col = getTypeColor(type);
+  const sz = highlight ? 36 : 28;
+  const icon = TYPE_ICON[type] || '📍';
+  const html = `<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${col};
+    display:flex;align-items:center;justify-content:center;font-size:${highlight?16:12}px;
+    border:${highlight?3:2}px solid white;box-shadow:0 2px 8px rgba(0,0,0,.5);
+    transition:all .2s">${icon}</div>`;
+  return L.divIcon({html, className:'', iconSize:[sz,sz], iconAnchor:[sz/2,sz/2]});
+}
+
+function renderDay() {
+  // Clear markers
+  Object.values(markerMap).forEach(m => leafletMap.removeLayer(m));
+  markerMap = {};
+
+  const city = CITIES[currentCity];
+  const days = DAYS[currentCity];
+  if (!days) return;
+
+  const dayData = days.find(d => d.day === currentDay);
+  if (!dayData) return;
+
+  // Draw route line
+  if (window._routeLine) leafletMap.removeLayer(window._routeLine);
+  const coords = dayData.places.filter(p=>p.lat).map(p=>[p.lat,p.lng]);
+  if (coords.length > 1) {
+    window._routeLine = L.polyline(coords, {
+      color: city.color, weight:2, dashArray:'5,8', opacity:.6
+    }).addTo(leafletMap);
+  }
+
+  // Add markers
+  dayData.places.forEach((p, i) => {
+    if (!p.lat) return;
+    const marker = L.marker([p.lat, p.lng], {icon: makeMarkerIcon(p.type, false)})
+      .addTo(leafletMap);
+
+    const groupBadge = p.group ? `<span style="font-size:10px;padding:1px 5px;border-radius:2px;margin-right:4px;
+      background:${p.group==='fair'?'rgba(192,57,43,.3)':p.group==='free'?'rgba(46,125,107,.3)':'rgba(200,150,42,.3)'}">
+      ${p.group==='fair'?'FAIR':p.group==='free'?'FREE':'ALL'}</span>` : '';
+
+    marker.bindPopup(`
+      <div style="font-family:system-ui;min-width:160px;max-width:220px">
+        <div style="font-size:11px;color:#888;font-family:monospace;margin-bottom:3px">${p.time||''}</div>
+        <div style="font-weight:700;font-size:13px;margin-bottom:4px">${groupBadge}${p.name}</div>
+        ${p.notes ? `<div style="font-size:11px;color:#555;margin-bottom:3px">${p.notes}</div>` : ''}
+        ${p.rating ? `<div style="font-size:11px;color:#c8962a">⭐ ${p.rating}</div>` : ''}
+        ${p.alert ? `<div style="font-size:11px;color:#c0392b;font-weight:600;margin-top:3px">⚠️ ${p.alert}</div>` : ''}
+        ${p.free ? `<div style="font-size:11px;color:#2e7d6b;margin-top:2px">FREE</div>` : ''}
+      </div>
+    `, {maxWidth:240});
+
+    marker.on('click', () => highlightRow(i));
+    markerMap[i] = marker;
+  });
+
+  // Fit bounds
+  if (coords.length > 0) {
+    const bounds = L.latLngBounds(coords);
+    leafletMap.fitBounds(bounds, {padding:[40,40], maxZoom:14});
+  }
+
+  renderList(dayData);
+  renderSummary(dayData);
+  updateLegend(dayData);
+}
+
+function renderList(dayData) {
+  const list = document.getElementById('placeList');
+  list.innerHTML = dayData.places.map((p, i) => {
+    const gb = p.group ? `<span class="gb gb-${p.group}">${p.group==='fair'?'FAIR':p.group==='free'?'FREE':'ALL'}</span>` : '';
+    let tags = '';
+    if (p.free) tags += `<span class="ptag tag-free">FREE</span>`;
+    if (p.alert) tags += `<span class="ptag tag-warn">⚠️ ${p.alert}</span>`;
+    if (p.award) tags += `<span class="ptag tag-star">${p.award}</span>`;
+    return `
+      <div class="place-row" id="row-${i}" onclick="clickRow(${i})">
+        <div class="ptime">${p.time||''}</div>
+        <div class="pico">${TYPE_ICON[p.type]||'📍'}</div>
+        <div>
+          <div class="pname">${gb}${p.name}</div>
+          ${p.notes ? `<div class="pnote">${p.notes}</div>` : ''}
+          ${tags ? `<div>${tags}</div>` : ''}
+        </div>
+        ${p.rating ? `<div class="prat">⭐${p.rating}</div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function renderSummary(dayData) {
+  const places = dayData.places.filter(p=>p.lat).length;
+  const free = dayData.places.filter(p=>p.free).length;
+  const food = dayData.places.filter(p=>p.type==='food').length;
+  const alert = dayData.alert ? `<span style="color:#ef9a9a">⚠️ ${dayData.alert}</span>` : '';
+  document.getElementById('summary').innerHTML = `
+    <span><strong>${places}</strong> สถานที่</span>
+    <span><strong>${food}</strong> ร้านอาหาร</span>
+    ${free ? `<span style="color:#80cbc4"><strong>${free}</strong> ฟรี</span>` : ''}
+    <span style="color:rgba(255,255,255,.4)">${dayData.date}</span>
+    ${alert}
+  `;
+}
+
+function updateLegend(dayData) {
+  const types = [...new Set(dayData.places.map(p=>p.type))];
+  const legend = document.getElementById('legend');
+  legend.innerHTML = types.map(t => `
+    <div class="leg-item">
+      <div class="leg-dot" style="background:${getTypeColor(t)}"></div>
+      <span>${TYPE_ICON[t]||''} ${t}</span>
+    </div>`).join('');
+}
+
+function clickRow(i) {
+  const dayData = DAYS[currentCity].find(d=>d.day===currentDay);
+  if (!dayData) return;
+  const p = dayData.places[i];
+  if (markerMap[i]) {
+    leafletMap.setView([p.lat, p.lng], 15, {animate:true});
+    markerMap[i].openPopup();
+    // Pulse marker
+    markerMap[i].setIcon(makeMarkerIcon(p.type, true));
+    setTimeout(()=>{ if(markerMap[i]) markerMap[i].setIcon(makeMarkerIcon(p.type, false)); }, 2000);
+  }
+  highlightRow(i);
+}
+
+function highlightRow(i) {
+  document.querySelectorAll('.place-row').forEach(r=>r.classList.remove('highlighted'));
+  const row = document.getElementById(`row-${i}`);
+  if (row) { row.classList.add('highlighted'); row.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+}
+
+// ── DAY BAR ───────────────────────────────────────────
+function buildDayBar(city) {
+  const bar = document.getElementById('daybar');
+  const days = DAYS[city];
+  bar.innerHTML = `<span class="day-label">Day:</span>` +
+    days.map(d => `
+      <button class="day-btn ${d.day===currentDay?'active':''}" data-city="${city}" onclick="setDay(${d.day},this)">
+        ${d.label}
+      </button>`).join('');
+}
+
+function setDay(day, btn) {
+  currentDay = day;
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDay();
+}
+
+function setCity(city, btn) {
+  currentCity = city;
+  currentDay = DAYS[city][0].day;
+  document.querySelectorAll('.city-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  leafletMap.setView(CITIES[city].center, CITIES[city].zoom, {animate:true});
+  buildDayBar(city);
+  renderDay();
+}
+
+// ── INIT ─────────────────────────────────────────────
+initMap();
+buildDayBar('sz');
+renderDay();
+</script>
+</body>
+</html>
